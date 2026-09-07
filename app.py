@@ -169,77 +169,77 @@ with tab2:
             st.markdown("### 順位入力")
 
             select_players = ["選択してください"] + player_list
-
-            col1, col2 = st.columns(2)
-
             # =====================
-            # 左側（1位・3位）
+            # 1位
             # =====================
 
-            with col1:
+            st.markdown("### 🥇 1位")
 
-                st.info("🥇 1位")
+            p1 = st.selectbox(
+                "氏名",
+                select_players,
+                key="p1"
+            )
 
-                p1 = st.selectbox(
-                    "氏名",
-                    select_players,
-                    key="p1"
-                )
-
-                score1 = st.number_input(
-                    "ポイント",
-                    value=45,
-                    key="score1"
-                )
-
-                st.info("🥉 3位")
-
-                p3 = st.selectbox(
-                    "氏名",
-                    select_players,
-                    key="p3"
-                )
-
-                score3 = st.number_input(
-                    "ポイント",
-                    value=-10,
-                    key="score3"
-                )
+            score1 = st.number_input(
+                "ポイント",
+                value=45,
+                key="score1"
+            )
 
             # =====================
-            # 右側（2位・4位）
+            # 2位
             # =====================
 
-            with col2:
+            st.markdown("### 🥈 2位")
 
-                st.success("🥈 2位")
+            p2 = st.selectbox(
+                "氏名",
+                select_players,
+                key="p2"
+            )
 
-                p2 = st.selectbox(
-                    "氏名",
-                    select_players,
-                    key="p2"
-                )
+            score2 = st.number_input(
+                "ポイント",
+                value=10,
+                key="score2"
+            )
 
-                score2 = st.number_input(
-                    "ポイント",
-                    value=10,
-                    key="score2"
-                )
+            # =====================
+            # 3位
+            # =====================
 
-                st.success("🏅 4位")
+            st.markdown("### 🥉 3位")
 
-                p4 = st.selectbox(
-                    "氏名",
-                    select_players,
-                    key="p4"
-                )
+            p3 = st.selectbox(
+                "氏名",
+                select_players,
+                key="p3"
+            )
 
-                score4 = st.number_input(
-                    "ポイント",
-                    value=-45,
-                    key="score4"
-                )
+            score3 = st.number_input(
+                "ポイント",
+                value=-10,
+                key="score3"
+            )
 
+            # =====================
+            # 4位
+            # =====================
+
+            st.markdown("### 🏅 4位")
+
+            p4 = st.selectbox(
+                "氏名",
+                select_players,
+                key="p4"
+            )
+
+            score4 = st.number_input(
+                "ポイント",
+                value=-45,
+                key="score4"
+            )
             st.divider()
 
             submit = st.form_submit_button(
