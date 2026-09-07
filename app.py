@@ -155,10 +155,10 @@ with tab2:
         )
     else:
         with st.form("result_form"):
-
-            tournament = st.text_input(
+            ##要修正
+            tournament = (
                 "大会名",
-                "第1回大会"
+                "第3回大会"
             )
 
             game_date = st.date_input(
