@@ -1,0 +1,488 @@
+import streamlit as st
+import pandas as pd
+import os
+import time
+import plotly.express as px
+from datetime import date
+
+from datetime import date
+
+st.set_page_config(
+    page_title="KMリーグ『金融麻雀リーグ』",
+    page_icon="🀄",
+    layout="wide"
+)
+
+PLAYER_FILE = "players.csv"
+RESULT_FILE = "results.csv"
+
+# =====================================
+# マスタ読込
+# =====================================
+
+players_df = pd.read_csv(
+    PLAYER_FILE,
+    encoding="utf-8-sig"
+)
+
+if not os.path.exists(RESULT_FILE):
+    pd.DataFrame(
+        columns=[
+            "大会",
+            "対局日",
+            "氏名",
+            "順位",
+            "ポイント"
+        ]
+    ).to_csv(
+        RESULT_FILE,
+        index=False,
+        encoding="utf-8-sig"
+    )
+
+results_df = pd.read_csv(
+    RESULT_FILE,
+    encoding="utf-8-sig"
+)
+
+player_list = players_df["氏名"].tolist()
+
+# =====================================
+# 画面
+# =====================================
+
+st.title("🀄 KMリーグ『金融麻雀リーグ』")
+
+tab1, tab2, tab3, tab4 = st.tabs(
+    [
+        "参加者・個人ランキング",
+        "対局結果入力",
+        "チームランキング",
+        "対局一覧"
+    ]
+)
+
+# =====================================
+# 参加者・個人ランキング
+# =====================================
+
+with tab1:
+
+    st.subheader("参加者・個人ランキング")
+
+    ranking_df = players_df.copy()
+
+    if not results_df.empty:
+
+        personal_rank = (
+            results_df
+            .groupby("氏名")
+            .agg(
+                累計ポイント=("ポイント", "sum"),
+                対局数=("順位", "count")
+            )
+            .reset_index()
+        )
+
+        ranking_df = pd.merge(
+            ranking_df,
+            personal_rank,
+            on="氏名",
+            how="left"
+        )
+
+    else:
+
+        ranking_df["累計ポイント"] = 0
+        ranking_df["対局数"] = 0
+
+    ranking_df["累計ポイント"] = (
+        ranking_df["累計ポイント"]
+        .fillna(0)
+        .astype(int)
+    )
+
+    ranking_df["対局数"] = (
+        ranking_df["対局数"]
+        .fillna(0)
+        .astype(int)
+    )
+
+    # 個人順位算出
+    ranking_df["個人順位"] = pd.NA
+
+    mask = ranking_df["対局数"] > 0
+
+    ranking_df.loc[mask, "個人順位"] = (
+        ranking_df.loc[mask, "累計ポイント"]
+        .rank(
+            method="min",
+            ascending=False
+        )
+        .astype(int)
+    )
+    ranking_df = ranking_df.sort_values(
+    by="個人順位",
+    na_position="last"
+    )
+
+    ranking_df = ranking_df[
+        [
+            "氏名",
+            "チーム",
+            "個人順位",
+            "累計ポイント",
+            "対局数"
+        ]
+    ]
+
+    st.dataframe(
+        ranking_df,
+        use_container_width=True,
+        hide_index=True
+    )
+
+# =====================================
+# 対局結果入力
+# =====================================
+
+with tab2:
+
+    st.subheader("対局結果入力")
+    if len(player_list) < 4:
+        st.warning(
+            "players.csvに4名以上登録してください。"
+        )
+    else:
+        with st.form("result_form"):
+
+            tournament = st.text_input(
+                "大会名",
+                "第1回大会"
+            )
+
+            game_date = st.date_input(
+                "対局日",
+                date.today()
+            )
+
+            st.markdown("### 順位入力")
+
+            select_players = ["選択してください"] + player_list
+
+            col1, col2 = st.columns(2)
+
+            # =====================
+            # 左側（1位・3位）
+            # =====================
+
+            with col1:
+
+                st.info("🥇 1位")
+
+                p1 = st.selectbox(
+                    "氏名",
+                    select_players,
+                    key="p1"
+                )
+
+                score1 = st.number_input(
+                    "ポイント",
+                    value=45,
+                    key="score1"
+                )
+
+                st.info("🥉 3位")
+
+                p3 = st.selectbox(
+                    "氏名",
+                    select_players,
+                    key="p3"
+                )
+
+                score3 = st.number_input(
+                    "ポイント",
+                    value=-10,
+                    key="score3"
+                )
+
+            # =====================
+            # 右側（2位・4位）
+            # =====================
+
+            with col2:
+
+                st.success("🥈 2位")
+
+                p2 = st.selectbox(
+                    "氏名",
+                    select_players,
+                    key="p2"
+                )
+
+                score2 = st.number_input(
+                    "ポイント",
+                    value=10,
+                    key="score2"
+                )
+
+                st.success("🏅 4位")
+
+                p4 = st.selectbox(
+                    "氏名",
+                    select_players,
+                    key="p4"
+                )
+
+                score4 = st.number_input(
+                    "ポイント",
+                    value=-45,
+                    key="score4"
+                )
+
+            st.divider()
+
+            submit = st.form_submit_button(
+                "結果登録",
+                use_container_width=True
+            )
+
+            if submit:
+
+                players = [p1, p2, p3, p4]
+
+                score_sum = (
+                    score1 +
+                    score2 +
+                    score3 +
+                    score4
+                )
+
+                if "選択してください" in players:
+
+                    st.error(
+                        "全員の参加者を選択してください。"
+                    )
+
+                elif len(set(players)) != 4:
+
+                    st.error(
+                        "同じ参加者を重複して選択できません。"
+                    )
+
+                elif score_sum != 0:
+
+                    st.error(
+                        f"ポイント合計が0ではありません（現在:{score_sum}）"
+                    )
+
+                else:
+                    from datetime import datetime
+                    table_id = datetime.now().strftime(
+                        "T%Y%m%d%H%M%S"
+                    )
+                    new_result = pd.DataFrame({
+
+                        "大会": [
+                            tournament,
+                            tournament,
+                            tournament,
+                            tournament
+                        ],
+
+                        "卓": [
+                            table_id,
+                            table_id,
+                            table_id,
+                            table_id
+                        ],
+
+                        "対局日": [
+                            game_date,
+                            game_date,
+                            game_date,
+                            game_date
+                        ],
+
+                        "氏名": [
+                            p1,
+                            p2,
+                            p3,
+                            p4
+                        ],
+
+                        "順位": [
+                            1,
+                            2,
+                            3,
+                            4
+                        ],
+
+                        "ポイント": [
+                            score1,
+                            score2,
+                            score3,
+                            score4
+                        ]
+                    })
+
+                    results_df = pd.concat(
+                        [results_df, new_result],
+                        ignore_index=True
+                    )
+
+                    results_df.to_csv(
+                        RESULT_FILE,
+                        index=False,
+                        encoding="utf-8-sig"
+                    )
+
+                    st.success(
+                        "結果を保存しました。"
+                    )
+
+                    time.sleep(2.5)
+
+                    st.rerun()
+
+# =====================================
+# チームランキング
+# =====================================
+
+with tab3 :
+
+    st.subheader("チームランキング")
+
+    if results_df.empty:
+
+        st.info(
+            "まだ対局結果が登録されていません。"
+        )
+
+    else:
+
+        merge_df = pd.merge(
+            results_df,
+            players_df,
+            on="氏名",
+            how="left"
+        )
+
+        team_rank = (
+            merge_df
+            .groupby("チーム")
+            .agg(
+                総ポイント=("ポイント", "sum"),
+                対局数=("氏名", "count")
+            )
+            .reset_index()
+            .sort_values(
+                "総ポイント",
+                ascending=False
+            )
+        )
+
+        st.dataframe(
+            team_rank,
+            use_container_width=True
+        )
+
+        fig = px.bar(
+            team_rank,
+            x="チーム",
+            y="総ポイント",
+            text="総ポイント"
+        )
+
+        fig.update_layout(
+            xaxis_title="チーム",
+            yaxis_title="総ポイント"
+        )
+
+        fig.update_traces(
+            textposition="outside"
+        )
+
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+# =====================================
+# 対局一覧
+# =====================================
+
+with tab4:
+
+    st.subheader("対局一覧")
+
+    if results_df.empty:
+
+        st.info(
+            "まだ対局結果が登録されていません。"
+        )
+
+    else:
+
+        # 日付順
+        results_view = results_df.copy()
+
+        results_view["対局日"] = pd.to_datetime(
+            results_view["対局日"]
+        )
+
+        game_dates = (
+            results_view["対局日"]
+            .sort_values(ascending=False)
+            .dt.date
+            .unique()
+        )
+
+        for game_date in game_dates:
+
+            st.markdown(
+                f"## 📅 {game_date}"
+            )
+
+            date_df = results_view[
+                results_view["対局日"].dt.date
+                == game_date
+            ]
+
+            table_ids = (
+                date_df["卓"]
+                .dropna()
+                .unique()
+            )
+
+            for table_id in table_ids:
+
+                game_df = (
+                    date_df[
+                        date_df["卓"] == table_id
+                    ]
+                    .sort_values("順位")
+                )
+                display_df = game_df[
+                    [
+                        "順位",
+                        "氏名",
+                        "ポイント"
+                    ]
+                ].copy()
+
+                display_df["順位"] = display_df["順位"].replace({
+                    1: "🥇",
+                    2: "🥈",
+                    3: "🥉",
+                    4: "4️⃣"
+                })
+
+                st.markdown(
+                    f"### 卓ID : {table_id}"
+                )
+
+                st.dataframe(
+                    display_df,
+                    hide_index=True,
+                    use_container_width=True
+                )
