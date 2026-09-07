@@ -149,6 +149,7 @@ with tab1:
 with tab2:
 
     st.subheader("対局結果入力")
+    st.subheader("＊＊＊テスト版にしているので、入力OK＊＊＊")
     if len(player_list) < 4:
         st.warning(
             "players.csvに4名以上登録してください。"
@@ -158,7 +159,8 @@ with tab2:
             ##要修正
             tournament = (
                 "大会名",
-                "第3回大会"
+                "テスト"
+                # "第3回大会"
             )
 
             game_date = st.date_input(
