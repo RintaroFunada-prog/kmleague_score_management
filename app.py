@@ -108,7 +108,10 @@ with tab1:
         .astype(int)
     )
 
+    # =====================================
     # 個人順位算出
+    # =====================================
+
     ranking_df["個人順位"] = pd.NA
 
     mask = ranking_df["対局数"] > 0
@@ -121,12 +124,52 @@ with tab1:
         )
         .astype(int)
     )
+
     ranking_df = ranking_df.sort_values(
-    by="個人順位",
-    na_position="last"
+        by="個人順位",
+        na_position="last"
     )
 
-    ranking_df = ranking_df[
+    # =====================================
+    # TOP3表示
+    # =====================================
+
+    top3_df = (
+        ranking_df[
+            ranking_df["対局数"] > 0
+        ]
+        .sort_values(
+            "累計ポイント",
+            ascending=False
+        )
+        .head(3)
+    )
+
+    if not top3_df.empty:
+
+        st.markdown("## 🏆 TOP3")
+
+        col1, col2, col3 = st.columns(3)
+
+        columns = [col1, col2, col3]
+        medals = ["🥇", "🥈", "🥉"]
+
+        for i, (_, row) in enumerate(top3_df.iterrows()):
+
+            with columns[i]:
+                st.metric(
+                    label=f"{medals[i]} {row['氏名']}",
+                    value=f"{row['累計ポイント']} pt",
+                    delta=f"{row['対局数']} 半荘"
+)
+
+        st.divider()
+
+    # =====================================
+    # 一覧表示
+    # =====================================
+
+    display_df = ranking_df[
         [
             "氏名",
             "チーム",
@@ -134,14 +177,13 @@ with tab1:
             "累計ポイント",
             "対局数"
         ]
-    ]
+    ].copy()
 
     st.dataframe(
-        ranking_df,
+        display_df,
         use_container_width=True,
         hide_index=True
     )
-
 # =====================================
 # 対局結果入力
 # =====================================
@@ -382,6 +424,40 @@ with tab3 :
                 ascending=False
             )
         )
+        # =====================================
+        # TOP3チーム表示
+        # =====================================
+
+        top3_team_df = (
+            team_rank
+            .sort_values(
+                "総ポイント",
+                ascending=False
+            )
+            .head(3)
+        )
+
+        if not top3_team_df.empty:
+
+            st.markdown("## 🏆 チームTOP3")
+
+            col1, col2, col3 = st.columns(3)
+
+            columns = [col1, col2, col3]
+            medals = ["🥇", "🥈", "🥉"]
+
+            for i, (_, row) in enumerate(top3_team_df.iterrows()):
+
+                with columns[i]:
+
+                    st.metric(
+                        label=f"{medals[i]} {row['チーム']}",
+                        value=f"{row['総ポイント']} pt",
+                        delta=f"{row['対局数']} 半荘"
+
+                    )
+
+            st.divider()
 
         st.dataframe(
             team_rank,
