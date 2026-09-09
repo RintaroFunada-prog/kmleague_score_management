@@ -209,7 +209,6 @@ with tab2:
         with st.form("result_form"):
             ##要修正
             tournament = (
-                "大会名",
                 # "テスト"
                 "第3回大会"
             )
@@ -327,6 +326,11 @@ with tab2:
 
                     st.error(
                         f"ポイント合計が0ではありません（現在:{score_sum}）"
+                    )
+
+                elif not (score1 >= score2 >= score3 >= score4):
+                    st.error(
+                        "順位に対するポイントの大小関係が不正です。（1位 ≥ 2位 ≥ 3位 ≥ 4位 となるよう入力してください）"
                     )
 
                 else:
