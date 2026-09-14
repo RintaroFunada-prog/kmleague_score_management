@@ -6,6 +6,21 @@ import plotly.express as px
 from datetime import date
 
 from datetime import date
+import gspread
+from google.oauth2.service_account import Credentials
+
+SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets"
+]
+
+creds = Credentials.from_service_account_file(
+    "kmleague-xxxx.json",
+    scopes=SCOPES
+)
+
+gc = gspread.authorize(creds)
+
+sheet = gc.open("KMリーグ_DB")
 
 st.set_page_config(
     page_title="KMリーグ『金融麻雀リーグ』",
@@ -20,9 +35,10 @@ RESULT_FILE = "results.csv"
 # マスタ読込
 # =====================================
 
-players_df = pd.read_csv(
-    PLAYER_FILE,
-    encoding="utf-8-sig"
+players_ws = sheet.worksheet("players")
+
+players_df = pd.DataFrame(
+    players_ws.get_all_records()
 )
 
 if not os.path.exists(RESULT_FILE):
@@ -40,9 +56,10 @@ if not os.path.exists(RESULT_FILE):
         encoding="utf-8-sig"
     )
 
-results_df = pd.read_csv(
-    RESULT_FILE,
-    encoding="utf-8-sig"
+results_ws = sheet.worksheet("results")
+
+results_df = pd.DataFrame(
+    results_ws.get_all_records()
 )
 
 player_list = players_df["氏名"].tolist()
@@ -388,11 +405,10 @@ with tab2:
                         ignore_index=True
                     )
 
-                    results_df.to_csv(
-                        RESULT_FILE,
-                        index=False,
-                        encoding="utf-8-sig"
-                    )
+                    for _, row in new_result.iterrows():
+                        results_ws.append_row(
+                            row.tolist()
+                        )
 
                     st.success(
                         "結果を保存しました。"
