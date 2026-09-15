@@ -12,7 +12,10 @@ from google.oauth2.service_account import Credentials
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets"
 ]
-
+st.write(
+    st.secrets["gcp_service_account"]["client_email"]
+)
+st.write(st.secrets["gcp_service_account"]["client_email"])
 creds = Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=SCOPES
