@@ -13,20 +13,7 @@ SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
-# # デバッグ開始
-# print("Service Account:", creds.service_account_email)
 
-# try:
-#     files = gc.openall()
-#     print("アクセス可能なシート数:", len(files))
-
-#     for f in files:
-#         print(f.title)
-
-# except Exception as e:
-#     print(type(e))
-#     print(repr(e))
-# # デバッグ終了
 creds = Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=SCOPES
@@ -419,13 +406,13 @@ with tab2:
                         [results_df, new_result],
                         ignore_index=True
                     )
-# 追記
+
                     results_df = results_df.fillna("")
 
                     for col in results_df.columns:
                         if pd.api.types.is_datetime64_any_dtype(results_df[col]):
                             results_df[col] = results_df[col].dt.strftime("%Y/%m/%d")
-# 追記
+
                     new_result["対局日"] = (
                         pd.to_datetime(new_result["対局日"])
                         .dt.strftime("%Y/%m/%d")
@@ -435,13 +422,7 @@ with tab2:
                         results_ws.append_row(
                             row.astype(str).tolist()
                         )
-# 追記
-# テスト
-                    # for _, row in new_result.iterrows():
-                    #     results_ws.append_row(
-                    #         row.tolist()
-                    #     )
-# テスト
+
                     st.success(
                         "結果を保存しました。"
                     )
