@@ -425,11 +425,21 @@ with tab2:
                         if pd.api.types.is_datetime64_any_dtype(results_df[col]):
                             results_df[col] = results_df[col].dt.strftime("%Y/%m/%d")
 # 追記
-# テスト
+                    new_result["対局日"] = (
+                        pd.to_datetime(new_result["対局日"])
+                        .dt.strftime("%Y/%m/%d")
+                    )
+
                     for _, row in new_result.iterrows():
                         results_ws.append_row(
-                            row.tolist()
+                            row.astype(str).tolist()
                         )
+# 追記
+# テスト
+                    # for _, row in new_result.iterrows():
+                    #     results_ws.append_row(
+                    #         row.tolist()
+                    #     )
 # テスト
                     st.success(
                         "結果を保存しました。"
