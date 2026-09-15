@@ -10,18 +10,23 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets"
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/drive"
 ]
-# デバッグ開始
-st.write(
-    st.secrets["gcp_service_account"]["client_email"]
-)
-st.write(st.secrets["gcp_service_account"]["client_email"])
+# # デバッグ開始
+# print("Service Account:", creds.service_account_email)
 
-st.write(st.secrets["gcp_service_account"]["client_email"])
-st.write(st.secrets["gcp_service_account"]["project_id"])
+# try:
+#     files = gc.openall()
+#     print("アクセス可能なシート数:", len(files))
 
-# デバッグ終了
+#     for f in files:
+#         print(f.title)
+
+# except Exception as e:
+#     print(type(e))
+#     print(repr(e))
+# # デバッグ終了
 creds = Credentials.from_service_account_info(
     st.secrets["gcp_service_account"],
     scopes=SCOPES
