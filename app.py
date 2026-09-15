@@ -426,10 +426,10 @@ with tab2:
                             results_df[col] = results_df[col].dt.strftime("%Y/%m/%d")
 # 追記
 # テスト
-                    # for _, row in new_result.iterrows():
-                    #     results_ws.append_row(
-                    #         row.tolist()
-                    #     )
+                    for _, row in new_result.iterrows():
+                        results_ws.append_row(
+                            row.tolist()
+                        )
 # テスト
                     st.success(
                         "結果を保存しました。"
