@@ -14,7 +14,7 @@ SCOPES = [
 ]
 
 creds = Credentials.from_service_account_file(
-    "kmleague-xxxx.json",
+    st.secrets["gcp_service_account"],
     scopes=SCOPES
 )
 

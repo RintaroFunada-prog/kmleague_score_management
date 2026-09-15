@@ -1,0 +1,20 @@
+[gcp_service_account]
+
+type = "service_account"
+project_id = "km-league-508206"
+private_key_id = "6863dbc689a1e56bf2a1abd926e490eb52705c65"
+
+private_key = """
+-----BEGIN PRIVATE KEY-----
+\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC4We+ZB/6cD2/K\nhrG+YhRCXxGfGpNV48EynsMXYfJnvhhryMDmASbTYkM4Na0u+QYRzG2C95NJaWrQ\nzAfQoE+Yw1eMIPR/9JKYONVDdxfdCGQs8aO3tfUKs05p05s8DpJaDJegoWA2lH4k\na1hB7vHVlZqKrDS1C+82s059aRqn79p9iFhqQTZr4uL5sscafThjrVYtpbqAdK2L\nBgshLIZ90bZPjsPvgHUefwxee7OEnpIhe4s/wi4hiEQfmhocrPOWLToDz5INl3um\ngmcjIDx8aho31y5arEgNdmHPFgSqPYdVo1RrlomzA/wiDGHB9eLkYKyR4Le7LGKY\neC8FSezvAgMBAAECggEAD6IEyOfeJfLDKpv4d6oOiMBSGLlitB5ftEC1T4bNTRHY\nNU+tV/PSDIvhImOe34RbiOfag4gmE8weND2RDhaCGXS7OFVVFoKxabosD5AKVIKR\nKCSHmx0RfgpNhHjeyZ18uKkntIXqyEYYWlNGBTVTiaapl8fZol60NuHGrqjai1IN\nG5YCJZy8/MqTEMGhBayqudpPl+AQShMUlcIjACPTC1JC3SOTBVNvVhf3FNTYcLZZ\nqqc1whhP7xeitWMZYzD0/Ir1kxpzh6jDDf7wpr45mtvC2yRPiA303NIa8nsrDbD3\nUtvmrosuygMM6xOJBZPAnMIx6SYWJVRUz1R2JvO0fQKBgQDxQHrcuL5EUhYGeh/R\nunxdzGu/o7ylNPDZlIsEE04M8aRnPMXAKe9oJLaa7ln0B0Qa1BXHfubi8816OjH6\n53ZtuDCdh1T72DDze3Xjt3MRqqME0L9tbab+oVvjsOu8H9y8h5hM+gkn82bu/Tpn\n9aQs5Y8a4GtztVHFUOqIJnDPFQKBgQDDnvqnxV7N0vljfw7zGplx7syE6SPsFaBP\nptlU1+Pm35uN4tXnvxi/VW+rgsqDdzyNmNsX68jvlcL/SHnYBpp/Ep4DgVZf2R8C\nBK2Lv+7WnF9uFIP+6TiPSdVciIV3GDU3ECJnlNfrvzTP338IgqaBe2hCYN6Tw2hq\nZP+pJ5bs8wKBgAowfv/zjZW1IdkEL3PcPIR5rdNaRw1zPvjxnS1+4z0It7jkiDWl\nj8cGRfAlQQddhzLa4lCau4W6ZmNTMek2/XmE3gjJPn2kk+y0ujXz+Zg1bM03Q96L\nUxJOHmNvhYVckyYjU/tsVBar4R0W9PCPH3AGAhVQhTlN3zZGRKGbfghBAoGACExK\nHavFpb15TrspCy7pq2eRzWGGYJFaR4awWWT/CeAaXR5uLHJyvksFfaUCqij4rJj7\nUjxyPZeAugt8/6joDNPhWAy4eUBgjFleczslCn1/ns/H+ZwzBgD/x/kSkEa6mydY\nDkTGE/38Y4T7goToQz3U4lvxlRsI5tp57db8E/kCgYEA4mvlKwoSVWmWlobQklxt\nGkkOZZ8NKbbdfIk5u8lDsjzSnMgw49c5Za+Hk/qml85FteoBmhIMuQq2vQio/muS\nqnoC5YsD4bPhJXULYB4hZ+MWUTMm7IRobeNNK3SZJv4pOQRLAOvEgJdTeNMhoUyZ\nIA5vGRSUyy8LXI8KL25Cpwc=\n
+-----END PRIVATE KEY-----
+"""
+
+client_email = "km-kanri@km-league-508206.iam.gserviceaccount.com"
+client_id = "108616098702433111814"
+
+auth_uri = "https://accounts.google.com/o/oauth2/auth"
+token_uri = "https://oauth2.googleapis.com/token"
+auth_provider_x509_cert_url = "https://www.googleapis.com/oauth2/v1/certs"
+client_x509_cert_url = "https://www.googleapis.com/robot/v1/metadata/x509/km-kanri%40km-league-508206.iam.gserviceaccount.com"
+universe_domain = "googleapis.com"
