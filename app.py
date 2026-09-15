@@ -20,7 +20,7 @@ creds = Credentials.from_service_account_info(
 
 gc = gspread.authorize(creds)
 
-sheet = gc.open_by_key("/1n1CDcrBwWz-Vm6RTl2uB1lb9FKkoJ8zrEOJA2oaWC-Y")
+sheet = gc.open_by_key("1n1CDcrBwWz-Vm6RTl2uB1lb9FKkoJ8zrEOJA2oaWC-Y")
 
 st.set_page_config(
     page_title="KMリーグ『金融麻雀リーグ』",
