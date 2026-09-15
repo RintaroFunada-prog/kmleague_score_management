@@ -418,12 +418,29 @@ with tab2:
                         [results_df, new_result],
                         ignore_index=True
                     )
+                    import pandas as pd
+# 追記
+                    safe_row = []
 
-                    for _, row in new_result.iterrows():
-                        results_ws.append_row(
-                            row.tolist()
-                        )
+                    for v in row.tolist():
 
+                        if pd.isna(v):
+                            safe_row.append("")
+
+                        elif isinstance(v, pd.Timestamp):
+                            safe_row.append(v.strftime("%Y/%m/%d"))
+
+                        else:
+                            safe_row.append(str(v))
+
+                    results_ws.append_row(safe_row)
+# 追記
+# テスト
+                    # for _, row in new_result.iterrows():
+                    #     results_ws.append_row(
+                    #         row.tolist()
+                    #     )
+# テスト
                     st.success(
                         "結果を保存しました。"
                     )
