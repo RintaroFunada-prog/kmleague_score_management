@@ -385,13 +385,6 @@ with tab2:
                             table_id
                         ],
 
-                        "対局日": [
-                            game_date,
-                            game_date,
-                            game_date,
-                            game_date
-                        ],
-
                         "氏名": [
                             p1,
                             p2,
@@ -406,11 +399,19 @@ with tab2:
                             4
                         ],
 
+
                         "ポイント": [
                             score1,
                             score2,
                             score3,
                             score4
+                        ],
+
+                        "対局日": [
+                            game_date,
+                            game_date,
+                            game_date,
+                            game_date
                         ]
                     })
 
